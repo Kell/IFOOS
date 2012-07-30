@@ -117,11 +117,10 @@ public class AlienShip extends Ship {
 //					GamePlayState.bullets.add(b);
 //				}
 //			}
-			if(super.bullets.size() == 0){
-				System.out.println("AlienShip shoots!!!");
+			if(super.bulletLoader.size() == 0){
 				Bullet b = new Bullet(x+((width/2) -5), y+ height, 10, 10, 2, this);
 				if(b != null) {
-					super.bullets.add(b);
+					super.bulletLoader.add(b);
 				}
 			}
 		}
