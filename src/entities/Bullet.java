@@ -53,9 +53,8 @@ public class Bullet extends Entity {
 
 	public void updateLogic(int delta, GameContainer gc) {
 		if(y + height < 0 || y + height >  gc.getHeight()) {
-			System.out.println("updateLogic Bullet");
-//			GamePlayState.removeList.add(this);
 			this.getOwner().bullets.remove(this);
+			this.setDestroyed(true);
 		}
 		else
 			move(delta, direction);
