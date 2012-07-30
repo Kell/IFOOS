@@ -29,8 +29,6 @@ import stuff.ShipContainer;
 public class GamePlayState extends BasicGameState {
 
 	private int id;
-	private int x;
-	private int y;
 
 	private Ship playerEnt;
 	private AlienMotherShip alienMotherShip;
@@ -75,8 +73,7 @@ public class GamePlayState extends BasicGameState {
 		entityList.add(playerEnt);
 		
 		//CREATE ALIEN SHIP CONTAINER (4 ROWS WITH 5 SHIPS);
-//		shipContainer = new ShipContainer(5, 8);
-		shipContainer = new ShipContainer(1, 8);
+		shipContainer = new ShipContainer(4, 8);
 		shipContainerBorders = shipContainer.borders;
 		entityList.addAll(shipContainer.alienShips);
 		
@@ -85,13 +82,9 @@ public class GamePlayState extends BasicGameState {
 		// START: CREATING SOME INITIAL STARS 
 		//=============================================================================
 		starsList = new ArrayList<Rectangle>();
-//		starsList.add(new Rectangle(50, -12,	5, 10));
 		//=============================================================================
 		// END: CREATING SOME INITIAL STARS 
 		//=============================================================================
-		
-		
-
 		
 		removeList = new ArrayList();
 	}
@@ -161,8 +154,6 @@ public class GamePlayState extends BasicGameState {
 			shipContainerBorders.setY(tmp_y);
 			shipContainerBorders.setHeight((int) (tmp_row*40)-10);
 			shipContainerBorders.setWidth((int)(tmp_max_x-tmp_x)+30);
-			
-	//		g.drawRect(shipContainerBorders.getX(), shipContainerBorders.getY(), shipContainerBorders.getWidth(), shipContainerBorders.getHeight());
 			
 			if(((shipContainerBorders.getY()+ shipContainerBorders.getHeight()) > 350) && shipContainer.getDx() != 15) {
 				System.out.println("increase speed!");
@@ -308,67 +299,41 @@ public class GamePlayState extends BasicGameState {
 		//==================================================================
 		// END: RANDOM STARS
 		//==================================================================
+
 		
 		handleInput(gc, playerEnt, delta);
 		
 		if(!gameOver && gameStarted) {
 			
 			boolean enemiesAlive = false;
-			bullets.clear();
-			
-			System.out.println("Update - bullets:"+bullets.size());
+
 			for(Ship s: entityList) {
 				s.updateLogic(delta);
 				
-				if (s instanceof AlienShip && !(s instanceof AlienMotherShip)) {
+				if (s instanceof AlienShip && !(s instanceof AlienMotherShip))
 					enemiesAlive = true;
-				}
 				
-				System.out.println("Update - add ship bullets to main Bullet List:"+s.bullets.size());
-				bullets.addAll(s.bullets);
-				System.out.println("Update - after bullets added:"+bullets.size());
-//				for(Bullet b: e.bullets) {
-//					b.updateLogic(delta);
-//					
-//					if(b.getLives() <= 0)
-//						continue;
-//					
-//					for (Entity ship: entityList) {
-//						
-//						CollisionDetection.checkCollision(b, ship);
-//						boolean removed = false;
-//						if(b.getLives() <= 0)
-//						{
-//							removeList.add(b);
-//							removed = true;
-//						}
-//						if(ship.getLives() <= 0)
-//							removeList.add(ship);
-//						
-//						if(!removed && !(b.getOwner() instanceof AlienShip))
-//							isCanonReady = false;
-//					}
-//				}
+				if(s.bulletLoader.size() > 0)
+				{
+					System.out.println("ADD BULLETS FROM LOADER");
+					bullets.addAll(s.bulletLoader);
+					s.bullets.addAll(s.bulletLoader);
+					s.bulletLoader.clear();
+				}
 			}
-			
-			
 			
 			
 			//Bullets
 			isCanonReady = true;
 			for(Bullet b: bullets) {
-				System.out.println("Bullet B update");
 				b.updateLogic(delta, gc);
 				
 				for (Entity ship: entityList) {
 					
 					CollisionDetection.checkCollision(b, ship);
 					boolean removed = false;
-					if(b.getLives() <= 0)
+					if(b.getLives() <= 0 || b.isDestroyed())
 					{
-						System.out.println("bullets before remove:"+b.getOwner().bullets.size());
-						b.getOwner().bullets.remove(b);
-						System.out.println("bullets after remove:"+b.getOwner().bullets.size());
 						removeList.add(b);
 						removed = true;
 					}
@@ -377,7 +342,6 @@ public class GamePlayState extends BasicGameState {
 					
 					if(!removed && !(b.getOwner() instanceof AlienShip))
 						isCanonReady = false;
-
 				}
 			}
 			
@@ -463,8 +427,9 @@ public class GamePlayState extends BasicGameState {
 			
 			if(gc.getInput().isKeyPressed(gc.getInput().KEY_SPACE) && isCanonReady)
 			{
-				bullets.addAll(entity.getSelectedWeapon().shoot(entity));
+//				bullets.addAll(entity.getSelectedWeapon().shoot(entity));
 //				entity.bullets.addAll(entity.getSelectedWeapon().shoot(entity));
+				entity.bulletLoader.addAll(entity.getSelectedWeapon().shoot(entity));
 			}
 			
 			entity.move(delta);
