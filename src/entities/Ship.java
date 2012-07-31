@@ -16,6 +16,7 @@ public class Ship extends Entity {
 	
 	ArrayList<Weapon> weapons;
 	public static ArrayList<Bullet> bullets;
+	public static ArrayList<Bullet> bulletLoader;
 	int selectedWeapon = 0;
 	
 	public Ship(int x, int y, int height, int width) {
@@ -27,12 +28,7 @@ public class Ship extends Entity {
 		weapons.add(new SplitWeapon());
 		
 		bullets = new ArrayList<Bullet>();
-//		try {
-//			img = new Image("res/ship.png");
-//		} catch (SlickException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		bulletLoader = new ArrayList<Bullet>();
 	}
 	
 	
@@ -70,7 +66,4 @@ public class Ship extends Entity {
 	public int getWeaponsCount() {
 		return weapons.size();
 	}
-	
-
-	
 }
