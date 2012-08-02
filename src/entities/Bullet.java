@@ -19,14 +19,6 @@ public class Bullet extends Entity {
 		this.dy = 20;
 		this.direction = direction;
 		this.owner = owner;
-//		try {
-//			img = new Image("res/laser.png");
-//			if(direction == 2)
-//				img.rotate(180);
-//		} catch (SlickException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 	}
 	
 	
@@ -52,8 +44,9 @@ public class Bullet extends Entity {
 	
 
 	public void updateLogic(int delta, GameContainer gc) {
+		
 		if(y + height < 0 || y + height >  gc.getHeight()) {
-			this.getOwner().bullets.remove(this);
+			this.getOwner().getBullets().remove(this);
 			this.setDestroyed(true);
 		}
 		else

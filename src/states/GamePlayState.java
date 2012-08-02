@@ -41,7 +41,6 @@ public class GamePlayState extends BasicGameState {
 	public static boolean gameOver = false;
 	private boolean win = false;
 	private boolean gameStarted;
-	private boolean isCanonReady = true;
 	public static boolean lostLive = false;
 	public int lostLiveDrawCounter = 0;
 	private boolean drawWeapons = false;
@@ -73,7 +72,7 @@ public class GamePlayState extends BasicGameState {
 		entityList.add(playerEnt);
 		
 		//CREATE ALIEN SHIP CONTAINER (4 ROWS WITH 5 SHIPS);
-		shipContainer = new ShipContainer(4, 8);
+		shipContainer = new ShipContainer(4, 6);
 		shipContainerBorders = shipContainer.borders;
 		entityList.addAll(shipContainer.alienShips);
 		
@@ -180,7 +179,6 @@ public class GamePlayState extends BasicGameState {
 			// BULLETS =================================================
 			g.setColor(Color.yellow);
 			for(Bullet b: bullets) {
-				System.out.println("draw Bullet!:"+b.getX()+"|"+b.getY());
 	//			entityImage = b.getImg();
 	//			if(entityImage != null)
 	//				entityImage.draw(b.getX(), b.getY());
@@ -217,6 +215,9 @@ public class GamePlayState extends BasicGameState {
 					w_y -= 60;
 				}
 			}
+			
+			
+			drawHUD(gc, sbg, g);
 		}
 		else
 		{
@@ -313,18 +314,16 @@ public class GamePlayState extends BasicGameState {
 				if (s instanceof AlienShip && !(s instanceof AlienMotherShip))
 					enemiesAlive = true;
 				
-				if(s.bulletLoader.size() > 0)
+				if(s.getBulletLoader().size() > 0)
 				{
-					System.out.println("ADD BULLETS FROM LOADER");
-					bullets.addAll(s.bulletLoader);
-					s.bullets.addAll(s.bulletLoader);
-					s.bulletLoader.clear();
+					bullets.addAll(s.getBulletLoader());
+					s.getBullets().addAll(s.getBulletLoader());
+					s.getBulletLoader().clear();
 				}
 			}
 			
 			
 			//Bullets
-			isCanonReady = true;
 			for(Bullet b: bullets) {
 				b.updateLogic(delta, gc);
 				
@@ -339,9 +338,6 @@ public class GamePlayState extends BasicGameState {
 					}
 					if(ship.getLives() <= 0)
 						removeList.add(ship);
-					
-					if(!removed && !(b.getOwner() instanceof AlienShip))
-						isCanonReady = false;
 				}
 			}
 			
@@ -385,7 +381,8 @@ public class GamePlayState extends BasicGameState {
 	
 	
 	
-	public void handleInput(GameContainer gc, Ship entity, int delta) {
+	public void handleInput(GameContainer gc, Ship entity, int delta) throws SlickException {
+		
 		
 		if(gameStarted && !gameOver) {
 			if (gc.getInput().isKeyDown(gc.getInput().KEY_RIGHT)) {
@@ -416,6 +413,10 @@ public class GamePlayState extends BasicGameState {
 					System.out.println("change Weapon");
 					int w_count = playerEnt.getWeaponsCount();
 					int w_cur_index = playerEnt.getSelectedWeaponIndex();
+					System.out.println("selected Weapon Index:"+w_cur_index);
+					System.out.println("selected Weapon w_count:"+w_count);
+					System.out.println("selected Weapon index increase:"+w_cur_index);
+					
 					
 					if(w_cur_index >= (w_count - 1))
 						playerEnt.setSelectedWeaponIndex(0);
@@ -425,12 +426,8 @@ public class GamePlayState extends BasicGameState {
 			}
 			
 			
-			if(gc.getInput().isKeyPressed(gc.getInput().KEY_SPACE) && isCanonReady)
-			{
-//				bullets.addAll(entity.getSelectedWeapon().shoot(entity));
-//				entity.bullets.addAll(entity.getSelectedWeapon().shoot(entity));
-				entity.bulletLoader.addAll(entity.getSelectedWeapon().shoot(entity));
-			}
+			if(gc.getInput().isKeyPressed(gc.getInput().KEY_SPACE))
+				entity.getSelectedWeapon().shoot(entity);
 			
 			entity.move(delta);
 		}
@@ -441,8 +438,31 @@ public class GamePlayState extends BasicGameState {
 				gameStarted =  true;
 			}
 		}
+	}
+	
+	
+	public void drawHUD(GameContainer gc, StateBasedGame sbg, final Graphics g) {
 		
-
+		//START: DRAW CURRENT WEAPON ========================================
+		int w_x = 10;
+		int w_y = gc.getHeight() - 60;
+		g.setLineWidth(3);
+		g.setColor(Color.white);
+		playerEnt.getSelectedWeapon().getImg().draw(w_x, w_y);
+		g.drawRoundRect(w_x, w_y, 45, 45, 4, 4);
+		//END: DRAW CURRENT WEAPON ========================================
+		
+		
+		
+		//START: DRAW WEAPON HEAT DISPLAY =====================================
+		g.setColor(Color.white);
+		g.setLineWidth(3);
+		g.drawRect(gc.getWidth() - 30, gc.getHeight() - 120, 20, 100);
+		
+		g.setColor(Color.red);
+		int tmp_y = ((gc.getHeight() - 120)+100) - playerEnt.getSelectedWeapon().getHeat();
+		g.fillRect(gc.getWidth() - 27, tmp_y, 17, playerEnt.getSelectedWeapon().getHeat());
+		//START: DRAW WEAPON HEAT DISPLAY =====================================
 	}
 	
 	

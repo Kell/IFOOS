@@ -14,10 +14,10 @@ import weapons.SplitWeapon;
 public class Ship extends Entity {
 
 	
-	ArrayList<Weapon> weapons;
-	public static ArrayList<Bullet> bullets;
-	public static ArrayList<Bullet> bulletLoader;
-	int selectedWeapon = 0;
+	private ArrayList<Weapon> weapons;
+	private ArrayList<Bullet> bullets;
+	private ArrayList<Bullet> bulletLoader;
+	private int selectedWeapon = 0;
 	
 	public Ship(int x, int y, int height, int width) {
 		super(x, y, height, width);
@@ -31,6 +31,10 @@ public class Ship extends Entity {
 		bulletLoader = new ArrayList<Bullet>();
 	}
 	
+	
+	public void updateLogic(int delta) {
+		getSelectedWeapon().decreaseHeat();
+	}
 	
 	public void move(long delta) {
 		// update the location of the entity based on move speeds
@@ -65,5 +69,13 @@ public class Ship extends Entity {
 	
 	public int getWeaponsCount() {
 		return weapons.size();
+	}
+	
+	public ArrayList<Bullet> getBulletLoader() {
+		return bulletLoader;
+	}
+	
+	public ArrayList<Bullet> getBullets() {
+		return bullets;
 	}
 }

@@ -22,35 +22,29 @@ public class SplitBullet extends Bullet {
 		this.direction = direction;
 		this.owner = owner;
 		this.start_y = y;
+		
+		System.out.println("NEW SPLITBULLET");
 
 	}
 	
-	
-	public Ship getOwner() {
-		return owner;
-	}
-
-
-	public void setOwner(Ship owner) {
-		this.owner = owner;
-	}
-
-
+	@Override
 	public void updateLogic(int delta) {
+		
+		//SPLIT UP
+		System.out.println("SPLIT BULLET Y:"+y+" start_y:"+start_y);
+		if(y - start_y >= 100)
+		{
+			System.out.println("SPLIT BULLET!!!!!");
+			owner.getBulletLoader().add(new SplitedBullet(1, x, y, direction, owner));
+			owner.getBulletLoader().add(new SplitedBullet(2, x, y, direction, owner));
+			this.setDestroyed(true);
+			owner.getBullets().remove(this);
+		}
+		
 		if(y + height < 0)
 			GamePlayState.removeList.add(this);
 		else
 			move(delta, direction);
-		
-	}
-	
-	public void move(long delta, int direction) {
-		// update the location of the entity based on move speeds
-		if(direction == 1)
-			y -= (delta * dy) / 100;
-		else
-			y += (delta * dy) / 100;
-			
 		
 	}
 }

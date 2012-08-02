@@ -8,7 +8,7 @@ import stuff.ShipContainer;
 
 public class AlienMotherShip extends AlienShip {
 
-	private int dx = 11;
+	private float dx = 0.9f;
 	
 	public AlienMotherShip(ShipContainer container, int x, int y, int height, int width, int row) {
 		super(container, x, y, height, width, row);
@@ -44,9 +44,9 @@ public class AlienMotherShip extends AlienShip {
 	public void move(long delta) {
 		// update the location of the entity based on move speeds
 		if(moveRight)
-			x += (delta * dx) / 100;
+			x += 1*dx;
 		else if (moveLeft) 
-			x -= (delta * dx) / 100;
+			x -= 1*dx;
 		
 	}
 

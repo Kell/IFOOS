@@ -9,8 +9,8 @@ public class Entity extends Rectangle {
 
 	protected int height;
 	protected int width;
-	protected int x;
-	protected int y;
+	protected float x;
+	protected float y;
 	protected int dx = 10;
 	protected int dy = 10;
 	protected Image img;
@@ -144,7 +144,6 @@ public class Entity extends Rectangle {
 	
 	public void draw(Graphics g, int x, int y)
 	{
-//		g.fillRect(x, y, width, height);
 		g.drawRect(x, y, width, height);
 	}
 
@@ -154,22 +153,5 @@ public class Entity extends Rectangle {
 		// TODO Auto-generated method stub
 		
 	}
-	
-//	public void move(long delta) {
-//		// update the location of the entity based on move speeds
-//		if(moveRight && x < (790 - width))
-//			x += (delta * dx) / 100;
-//		else if (moveLeft && x > 10) {
-//			x -= (delta * dx) / 100;
-//		}
-//		else if (moveUp) {
-//			y -= (delta * dy) / 100;
-//		}
-//		else if (moveUp) {
-//			y += (delta * dy) / 100;
-//		}
-//		
-//	}
-	
 	
 }

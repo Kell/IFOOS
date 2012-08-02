@@ -13,7 +13,7 @@ public class AlienShip extends Ship {
 	
 	private boolean rightEdge = false;
 	private boolean leftEdge = false;
-	private int tmpY;
+	private float tmpY;
 	private int score = 10;
 	private int row;
 	private Color color = Color.green;
@@ -59,7 +59,6 @@ public class AlienShip extends Ship {
 
 
 	public void updateLogic(int delta) {
-		
 		//MOVEMENT TO THE RIGHT
 		if(x < (790 - width) && moveLeft == false)
 		{
@@ -111,16 +110,10 @@ public class AlienShip extends Ship {
 		int rand = (int) (Math.random() * (3500 - 1) + 1);
 		if(rand <= 3)
 		{
-//			if(GamePlayState.bullets.size() == 0){
-//				Bullet b = new Bullet(x+((width/2) -5), y+ height, 10, 10, 2, this);
-//				if(b != null) {
-//					GamePlayState.bullets.add(b);
-//				}
-//			}
-			if(super.bulletLoader.size() == 0){
+			if(getBulletLoader().size() == 0){
 				Bullet b = new Bullet(x+((width/2) -5), y+ height, 10, 10, 2, this);
 				if(b != null) {
-					super.bulletLoader.add(b);
+					getBulletLoader().add(b);
 				}
 			}
 		}
@@ -135,13 +128,13 @@ public class AlienShip extends Ship {
 		dy = (int) shipContainer.getDy();
 		
 		if(moveRight)
-			x += (delta * dx) / 100;
+			x += 1;
 		else if (moveLeft) 
-			x -= (delta * dx) / 100;
+			x -= 1;
 		else if (moveUp)
-			y -= (delta * dy) / 100;
+			y -= 1;
 		else if (moveDown) 
-			y += (delta * dy) / 100;
+			y += 1;
 		
 	}
 }

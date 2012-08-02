@@ -22,16 +22,12 @@ public class SplitWeapon extends Weapon {
 	
 	
 	
-	public ArrayList<Bullet> shoot(Ship owner) {
-		
+	public void shoot(Ship owner) {
+		System.out.println("SplitWeapon shoot");
 		SplitBullet b = new SplitBullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner);
 		
-//		super.bullets.add(b);
-		owner.bullets.add(b);
+		owner.getBulletLoader().add(b);
 		
-		return owner.bullets; 
-		
-//		return super.bullets; 
 	}
 	
 }

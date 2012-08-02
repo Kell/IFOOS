@@ -22,13 +22,11 @@ public class DualWeapon extends Weapon {
 	
 	
 	
-	public ArrayList<Bullet> shoot(Ship owner) {
+	public void shoot(Ship owner) {
 		
 		DualBullet db = new DualBullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner);
 		
-		owner.bullets.addAll(db.getBullets());
-		
-		return owner.bullets; 
+		owner.getBulletLoader().addAll(db.getBullets());
 	}
 	
 }

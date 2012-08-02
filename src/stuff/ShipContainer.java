@@ -14,7 +14,7 @@ import entities.Ship;
 public class ShipContainer {
 
 	
-	private int x = -500;
+	private int x = 100;
 	private int y = 30;
 	private int width;
 	private int height;
@@ -26,8 +26,6 @@ public class ShipContainer {
 	public static ArrayList<Ship> alienShips;
 	
 	public ShipContainer(int rows, int ships) {
-		
-		// TODO Auto-generated constructor stub
 		
 		alienShips = new ArrayList<Ship>();
 		//alien ship rows
@@ -44,7 +42,6 @@ public class ShipContainer {
 				tmp_x += 60;
 				
 			}
-			System.out.println("tmp_x:"+tmp_x);
 			tmp_y += 40;
 		}
 		//width  (ship*(ship_wdith+extra_space)-space_between_ships)
