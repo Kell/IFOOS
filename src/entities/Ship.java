@@ -18,6 +18,7 @@ public class Ship extends Entity {
 	private ArrayList<Bullet> bullets;
 	private ArrayList<Bullet> bulletLoader;
 	private int selectedWeapon = 0;
+	private boolean emergency = false;
 	
 	public Ship(int x, int y, int height, int width) {
 		super(x, y, height, width);
@@ -34,6 +35,11 @@ public class Ship extends Entity {
 	
 	public void updateLogic(int delta) {
 		getSelectedWeapon().decreaseHeat();
+		
+		if(getSelectedWeapon().getHeat() > 80)
+			emergency = true;
+		else
+			emergency = false;
 	}
 	
 	public void move(long delta) {
@@ -51,6 +57,17 @@ public class Ship extends Entity {
 	
 	
 	
+	
+	public boolean isEmergency() {
+		return emergency;
+	}
+
+
+	public void setEmergency(boolean emergency) {
+		this.emergency = emergency;
+	}
+
+
 	public ArrayList<Weapon> getWeapons() {
 		return weapons;
 	}

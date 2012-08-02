@@ -44,6 +44,9 @@ public class GamePlayState extends BasicGameState {
 	public static boolean lostLive = false;
 	public int lostLiveDrawCounter = 0;
 	private boolean drawWeapons = false;
+	private int screenWidth;
+	private int screenHeight;
+	private boolean drawAlertOverlay = false;
 	
 	Image entityImage = null;
 	ShipContainer shipContainer;
@@ -59,6 +62,10 @@ public class GamePlayState extends BasicGameState {
 		gc.setVSync(true);
 		gc.setTargetFrameRate(60);
 		gc.setShowFPS(true);
+		
+		
+		screenWidth = gc.getWidth();
+		screenHeight = gc.getHeight();
 		
 		gameStarted = false;
 
@@ -225,6 +232,8 @@ public class GamePlayState extends BasicGameState {
 			g.drawString("Press return to start the game" , (gc.getWidth() / 2) - 120, (gc.getHeight() / 2) + 30);
 		}
 		
+		if(drawAlertOverlay)
+			drawAlertOverlay(gc, sbg, g);
 		
 		// SCORE ====================================================
 		g.setColor(Color.white);
@@ -241,12 +250,10 @@ public class GamePlayState extends BasicGameState {
 		}
 		
 		if(lostLive) {
-			int gcWidth = gc.getWidth(); 
-			int gcHeight = gc.getHeight(); 
 			
 			Color trans = new Color(1f,0f,0f,0.5f);
 	        g.setColor(trans);
-	        g.fillRect(0,0, gcWidth, gcHeight);
+	        g.fillRect(0,0, screenWidth, screenHeight);
 	        if(lostLiveDrawCounter == 6) {
 	        	lostLive = false;
 	        	lostLiveDrawCounter = 0;
@@ -267,7 +274,7 @@ public class GamePlayState extends BasicGameState {
 			else
 				gameOverString = "YOU LOST!";
 				
-			g.drawString(gameOverString , (gc.getWidth() / 2) - 20, (gc.getHeight() / 2) - 10);
+			g.drawString(gameOverString , (screenWidth / 2) - 20, (screenHeight / 2) - 10);
 		}
 	}
 
@@ -322,6 +329,11 @@ public class GamePlayState extends BasicGameState {
 				}
 			}
 			
+			
+			if(playerEnt.isEmergency())
+				drawAlertOverlay = true;
+			else
+				drawAlertOverlay = false;
 			
 			//Bullets
 			for(Bullet b: bullets) {
@@ -442,7 +454,6 @@ public class GamePlayState extends BasicGameState {
 	
 	
 	public void drawHUD(GameContainer gc, StateBasedGame sbg, final Graphics g) {
-		
 		//START: DRAW CURRENT WEAPON ========================================
 		int w_x = 10;
 		int w_y = gc.getHeight() - 60;
@@ -457,12 +468,23 @@ public class GamePlayState extends BasicGameState {
 		//START: DRAW WEAPON HEAT DISPLAY =====================================
 		g.setColor(Color.white);
 		g.setLineWidth(3);
-		g.drawRect(gc.getWidth() - 30, gc.getHeight() - 120, 20, 100);
+		g.drawRect(screenWidth - 30, screenHeight - 120, 20, 100);
+		
+		float full = 100;
+		float one = playerEnt.getSelectedWeapon().getHeatLoad() / 100;
 		
 		g.setColor(Color.red);
-		int tmp_y = ((gc.getHeight() - 120)+100) - playerEnt.getSelectedWeapon().getHeat();
-		g.fillRect(gc.getWidth() - 27, tmp_y, 17, playerEnt.getSelectedWeapon().getHeat());
+		int tmp_y = ((screenHeight - 120)+100) - playerEnt.getSelectedWeapon().getHeat();
+		g.fillRect(screenWidth - 28, tmp_y, 17, playerEnt.getSelectedWeapon().getHeat());
 		//START: DRAW WEAPON HEAT DISPLAY =====================================
+	}
+	
+	
+	
+	public void drawAlertOverlay(GameContainer gc, StateBasedGame sbg, final Graphics g) {
+		Color trans = new Color(1f,0f,0f,0.5f);
+        g.setColor(trans);
+        g.fillRect(0,0, screenWidth, screenHeight);
 	}
 	
 	
