@@ -37,7 +37,6 @@ public class GameMenuState extends BasicGameState {
 		logo = new Image("res/logo.png");
 		cursor = new Image("res/cursor.png");
 		singleplayer = new Image("res/defend.png");
-//		multiplayer = new Image("res/multiplayer.png");
 		options = new Image("res/options.png");
 		exit = new Image("res/exit.png");
 	}
@@ -121,7 +120,7 @@ public class GameMenuState extends BasicGameState {
 			sbg.enterState(Game.GAMEPLAYSTATE);
 			break;
 		case 2:
-//			sbg.enterState(Game.GAMEOPTIONSTATE);
+			sbg.enterState(Game.GAMEOPTIONSTATE);
 			break;
 		case 3:
 			System.exit(0);

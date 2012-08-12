@@ -6,6 +6,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import states.GameMenuState;
+import states.GameOptionState;
 import states.GamePlayState;
 
 
@@ -13,7 +14,7 @@ public class Game extends StateBasedGame {
 
 	public static final int GAMEMENUSTATE 	= 0;
 	public static final int GAMEPLAYSTATE 	= 1;
-//	public static final int GAMEOPTIONSTATE = 2;
+	public static final int GAMEOPTIONSTATE = 2;
 //	public static final int GAMEOVERSTATE 	= 3;
 	
 	public Game() {
@@ -21,7 +22,7 @@ public class Game extends StateBasedGame {
 		
 		this.addState(new GamePlayState(GAMEPLAYSTATE));
 		this.addState(new GameMenuState(GAMEMENUSTATE));
-//		this.addState(new GameOptionState(GAMEOPTIONSTATE));
+		this.addState(new GameOptionState(GAMEOPTIONSTATE));
 //		this.addState(new GameOverState(GAMEOVERSTATE));
 		this.enterState(GAMEMENUSTATE);
 
@@ -36,6 +37,7 @@ public class Game extends StateBasedGame {
 	public void initStatesList(GameContainer container) throws SlickException {
 		this.getState(GAMEMENUSTATE).init(container, this);
 		this.getState(GAMEPLAYSTATE).init(container, this);
+		this.getState(GAMEOPTIONSTATE).init(container, this);
 	}
 
 }
