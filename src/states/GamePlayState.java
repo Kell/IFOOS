@@ -4,6 +4,8 @@ package states;
 
 import java.util.ArrayList;
 
+import lib.LevelLoader;
+
 import ships.AlienMotherShip;
 import ships.AlienShip;
 import stuff.Game;
@@ -49,8 +51,6 @@ public class GamePlayState extends BasicGameState {
 	private boolean drawAlertOverlay = false;
 	
 	Image entityImage = null;
-	ShipContainer shipContainer;
-	Rectangle shipContainerBorders;
 	
 	public GamePlayState(int gameplaystate) {
 		this.id = gameplaystate;
@@ -61,7 +61,7 @@ public class GamePlayState extends BasicGameState {
 			throws SlickException {
 		gc.setVSync(true);
 		gc.setTargetFrameRate(60);
-		gc.setShowFPS(true);
+		gc.setShowFPS(false);
 		
 		
 		screenWidth = gc.getWidth();
@@ -78,10 +78,8 @@ public class GamePlayState extends BasicGameState {
 		playerEnt.setLives(3);
 		entityList.add(playerEnt);
 		
-		//CREATE ALIEN SHIP CONTAINER (4 ROWS WITH 5 SHIPS);
-		shipContainer = new ShipContainer(4, 6);
-		shipContainerBorders = shipContainer.borders;
-		entityList.addAll(shipContainer.alienShips);
+		LevelLoader.initLevel(1);
+		entityList.addAll(LevelLoader.shipContainer.alienShips);
 		
 		
 		//=============================================================================
@@ -148,36 +146,20 @@ public class GamePlayState extends BasicGameState {
 				else
 					g.setColor(Color.white);
 				
-	//			if(!(e instanceof AlienShip)) {
-	//				e.getImg().draw(e.getX(), e.getY());
-	//			} else
-					e.draw(g, (int) e.getX(), (int) e.getY());
+				e.draw(g, (int) e.getX(), (int) e.getY());
 					
 					
 			}//END: (Entity e: entityList)
 			
-			shipContainerBorders.setX(tmp_x);
-			shipContainerBorders.setY(tmp_y);
-			shipContainerBorders.setHeight((int) (tmp_row*40)-10);
-			shipContainerBorders.setWidth((int)(tmp_max_x-tmp_x)+30);
+			LevelLoader.shipContainer.borders.setX(tmp_x);
+			LevelLoader.shipContainer.borders.setY(tmp_y);
+			LevelLoader.shipContainer.borders.setHeight((int) (tmp_row*40)-10);
+			LevelLoader.shipContainer.borders.setWidth((int)(tmp_max_x-tmp_x)+30);
 			
-			if(((shipContainerBorders.getY()+ shipContainerBorders.getHeight()) > 350) && shipContainer.getDx() != 15) {
-				System.out.println("increase speed!");
-				shipContainer.setDx(15);
-				shipContainer.setDy(15);
+			if(((LevelLoader.shipContainer.borders.getY()+ LevelLoader.shipContainer.borders.getHeight()) > 350) && LevelLoader.shipContainer.getDx() != 15) {
+				LevelLoader.shipContainer.setDx(15);
+				LevelLoader.shipContainer.setDy(15);
 			}
-			
-			
-			if(tmp_y >= 100 && alienMotherShip == null) {
-				alienMotherShip = new AlienMotherShip(null, -80, 20, 30, 90, 0);
-				entityList.add(alienMotherShip);
-			}
-			
-	//		if(alienMotherShip != null)
-	//		{
-	//			g.setColor(alienMotherShip.getColor());
-	//			alienMotherShip.draw(g, (int) alienMotherShip.getX(), (int) alienMotherShip.getY());
-	//		}
 			//============================================================================================
 			// END: ALIEN SHIP CONTAINER 
 			//============================================================================================
@@ -186,9 +168,6 @@ public class GamePlayState extends BasicGameState {
 			// BULLETS =================================================
 			g.setColor(Color.yellow);
 			for(Bullet b: bullets) {
-	//			entityImage = b.getImg();
-	//			if(entityImage != null)
-	//				entityImage.draw(b.getX(), b.getY());
 				g.drawRect(b.getX(), b.getY(), b.getHeight(), b.getWidth());
 			}
 			
@@ -314,6 +293,12 @@ public class GamePlayState extends BasicGameState {
 		if(!gameOver && gameStarted) {
 			
 			boolean enemiesAlive = false;
+			
+			//temporary not active  due to implementation of Levels
+//			if(LevelLoader.shipContainer.borders.getY() >= 100 && alienMotherShip == null) {
+//				alienMotherShip = new AlienMotherShip(null, -80, 20, 30, 90, 0);
+//				entityList.add(alienMotherShip);
+//			}
 
 			for(Ship s: entityList) {
 				s.updateLogic(delta);
@@ -355,12 +340,26 @@ public class GamePlayState extends BasicGameState {
 			
 			
 			if(playerEnt.getLives() <= 0) {
-				gameOver = true;
-				win = false;
+					gameOver = true;
+					win = false;
 			}
 			else if (!enemiesAlive) {
-				gameOver = true;
-				win = true;
+				if(LevelLoader.nextLevelExists()) {
+					boolean levelChanged = LevelLoader.changeToNextLevel();
+					if(levelChanged)
+						entityList.addAll(LevelLoader.shipContainer.alienShips);
+					else
+					{
+						gameOver = true;
+						win = true;
+					}
+						
+				}
+				else
+				{
+					gameOver = true;
+					win = true;
+				}
 			}
 			
 			
@@ -436,7 +435,6 @@ public class GamePlayState extends BasicGameState {
 						playerEnt.setSelectedWeaponIndex(w_cur_index+1);
 				}
 			}
-			
 			
 			if(gc.getInput().isKeyPressed(gc.getInput().KEY_SPACE))
 				entity.getSelectedWeapon().shoot(entity);

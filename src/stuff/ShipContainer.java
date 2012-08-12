@@ -48,6 +48,33 @@ public class ShipContainer {
 		//height
 		borders = new Rectangle(x, y, ((ships*60)-30), (rows*70)-10);
 	}
+	
+	public ShipContainer(int[][] levelShips) {
+		
+		alienShips = new ArrayList<Ship>();
+		//alien ship rows
+		int tmp_y = y;
+		int tmpShips = 0;
+		int tmpRows = 0;
+		for(int r = 1; r < levelShips.length; r++) {
+			//ships per row
+			int tmp_x = x;
+			tmpRows++;
+			tmpShips = 0;
+			for(int s = 1; s < levelShips[r].length; s++) {
+				tmpShips++;	
+				if(levelShips[r][s] == 1)
+					alienShips.add(new AlienShip(this, tmp_x, tmp_y, 30, 30, r));
+				else if(levelShips[r][s] == 2)
+					alienShips.add(new AlienCommanderShip(this, tmp_x, tmp_y, 30, 30, r));
+				
+				tmp_x += 60;
+				
+			}
+			tmp_y += 40;
+		}
+		borders = new Rectangle(x, y, ((tmpShips*60)-30), (tmpRows*70)-10);
+	}
 
 	public int getX() {
 		return x;
