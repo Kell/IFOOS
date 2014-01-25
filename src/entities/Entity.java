@@ -14,7 +14,8 @@ public class Entity extends Rectangle {
 	protected int dx = 10;
 	protected int dy = 10;
 	protected Image img;
-	private int lives = 1;
+	protected int health = 50;
+	protected int healthMax = 50;
 	private int score = 0;
 	
 	protected boolean moveRight = false;
@@ -80,12 +81,20 @@ public class Entity extends Rectangle {
 		this.dy = dy;
 	}
 	
-	public int getLives() {
-		return lives;
+	public int getHealth() {
+		return health;
 	}
 
-	public void setLives(int lives) {
-		this.lives = lives;
+	public void setHealth(int health) {
+		this.health = health;
+	}
+	
+	public int getHealthMax() {
+		return healthMax;
+	}
+	
+	public void setHealthMax(int newhealthMax) {
+		this.healthMax = newhealthMax;
 	}
 
 	public int getScore() {

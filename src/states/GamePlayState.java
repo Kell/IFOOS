@@ -5,7 +5,6 @@ package states;
 import java.util.ArrayList;
 
 import lib.LevelLoader;
-
 import ships.AlienMotherShip;
 import ships.AlienShip;
 import stuff.Game;
@@ -22,9 +21,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import entities.Bullet;
 import entities.Entity;
+import entities.PlayerShip;
 import entities.Ship;
 import entities.Weapon;
-
 import stuff.CollisionDetection;
 import stuff.ShipContainer;
 
@@ -43,8 +42,10 @@ public class GamePlayState extends BasicGameState {
 	public static boolean gameOver = false;
 	private boolean win = false;
 	private boolean gameStarted;
-	public static boolean lostLive = false;
-	public int lostLiveDrawCounter = 0;
+	
+//	public static boolean lostLive = false;
+//	public int lostLiveDrawCounter = 0;
+	
 	private boolean drawWeapons = false;
 	private int screenWidth;
 	private int screenHeight;
@@ -74,8 +75,7 @@ public class GamePlayState extends BasicGameState {
 		entityList = new ArrayList<Ship>();
 		
 		//ADD PLAYER SHIP
-		playerEnt = new Ship((gc.getWidth() / 2) - 15, 550, 32, 32);
-		playerEnt.setLives(3);
+		playerEnt = new PlayerShip((gc.getWidth() / 2) - 15, 550, 32, 32);
 		entityList.add(playerEnt);
 		
 		LevelLoader.initLevel(1);
@@ -220,28 +220,28 @@ public class GamePlayState extends BasicGameState {
 		g.drawString(Integer.toString(score), 700, 10);
 		
 		// LIVES ====================================================
-		g.setColor(Color.white);
-		g.drawString("LIVES", 30, 20);
-		int lives_x = 70;
-		for (int i = 1; i <= playerEnt.getLives(); i++) {
-			lives_x += 20; 
-			g.fillRect(lives_x, 25, 10, 10);
-		}
-		
-		if(lostLive) {
-			
-			Color trans = new Color(1f,0f,0f,0.5f);
-	        g.setColor(trans);
-	        g.fillRect(0,0, screenWidth, screenHeight);
-	        if(lostLiveDrawCounter == 6) {
-	        	lostLive = false;
-	        	lostLiveDrawCounter = 0;
-	        }
-	        
-	        lostLiveDrawCounter++;
-	        
-		}
-		
+//		g.setColor(Color.white);
+//		g.drawString("LIVES", 30, 20);
+//		int lives_x = 70;
+//		for (int i = 1; i <= playerEnt.getLives(); i++) {
+//			lives_x += 20; 
+//			g.fillRect(lives_x, 25, 10, 10);
+//		}
+//		
+//		if(lostLive) {
+//			
+//			Color trans = new Color(1f,0f,0f,0.5f);
+//	        g.setColor(trans);
+//	        g.fillRect(0,0, screenWidth, screenHeight);
+//	        if(lostLiveDrawCounter == 6) {
+//	        	lostLive = false;
+//	        	lostLiveDrawCounter = 0;
+//	        }
+//	        
+//	        lostLiveDrawCounter++;
+//	        
+//		}
+//		
 		
 		
 		// GAME OVER ================================================
@@ -328,18 +328,19 @@ public class GamePlayState extends BasicGameState {
 					
 					CollisionDetection.checkCollision(b, ship);
 					boolean removed = false;
-					if(b.getLives() <= 0 || b.isDestroyed())
+					if(b.getHealth() <= 0 || b.isDestroyed())
 					{
 						removeList.add(b);
 						removed = true;
 					}
-					if(ship.getLives() <= 0)
+					
+					if(ship.getHealth() <= 0)
 						removeList.add(ship);
 				}
 			}
 			
 			
-			if(playerEnt.getLives() <= 0) {
+			if(playerEnt.getHealth() <= 0) {
 					gameOver = true;
 					win = false;
 			}
@@ -471,15 +472,29 @@ public class GamePlayState extends BasicGameState {
 		//START: DRAW WEAPON HEAT DISPLAY =====================================
 		g.setColor(Color.white);
 		g.setLineWidth(3);
-		g.drawRect(screenWidth - 30, screenHeight - 120, 20, 100);
+		g.drawRect(screenWidth - 60, screenHeight - 120, 20, 102);
 		
-		float full = 100;
-		float one = playerEnt.getSelectedWeapon().getHeatLoad() / 100;
 		
 		g.setColor(Color.red);
-		int tmp_y = ((screenHeight - 120)+100) - playerEnt.getSelectedWeapon().getHeat();
-		g.fillRect(screenWidth - 28, tmp_y, 17, playerEnt.getSelectedWeapon().getHeat());
-		//START: DRAW WEAPON HEAT DISPLAY =====================================
+		int tmp_y = ((screenHeight - 120)+102) - playerEnt.getSelectedWeapon().getHeat();
+		g.fillRect(screenWidth - 58, tmp_y, 17, playerEnt.getSelectedWeapon().getHeat());
+		//END: DRAW WEAPON HEAT DISPLAY =====================================
+		
+		
+		
+		//START: DRAW HEALTH BAR =====================================
+		g.setColor(Color.white);
+		g.setLineWidth(3);
+		g.drawRect(screenWidth - 30, screenHeight - 120, 20, 102);
+		
+		System.out.println("HEALTH:"+playerEnt.getHealth());
+		
+		int health = (playerEnt.getHealth() * 100) / playerEnt.getHealthMax();
+		
+		g.setColor(Color.green);
+		tmp_y = ((screenHeight - 120)+102) - health;
+		g.fillRect(screenWidth - 28, tmp_y, 17, health);
+		//END: DRAW HEALTH ===========================================
 	}
 	
 	
@@ -489,6 +504,7 @@ public class GamePlayState extends BasicGameState {
         g.setColor(trans);
         g.fillRect(0,0, screenWidth, screenHeight);
 	}
+	
 	
 	
 }

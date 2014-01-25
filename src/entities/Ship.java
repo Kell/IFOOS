@@ -56,8 +56,6 @@ public class Ship extends Entity {
 	}
 	
 	
-	
-	
 	public boolean isEmergency() {
 		return emergency;
 	}
@@ -94,5 +92,11 @@ public class Ship extends Entity {
 	
 	public ArrayList<Bullet> getBullets() {
 		return bullets;
+	}
+	
+	
+	public void makeDamage(int damage) {
+		if(health > 0)
+			health -= damage;
 	}
 }

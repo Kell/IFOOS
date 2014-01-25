@@ -4,8 +4,8 @@ import org.newdawn.slick.geom.Rectangle;
 
 import entities.Bullet;
 import entities.Entity;
+import entities.PlayerShip;
 import entities.Ship;
-
 import ships.AlienShip;
 import states.GamePlayState;
 
@@ -31,20 +31,22 @@ public class CollisionDetection {
 			Ship bulletOwnerShip = b.getOwner();
 			
 			// BULLETS FROM PLAYER SHIP
-			if (!( bulletOwnerShip instanceof AlienShip)) {
-				colideWithEntity.setLives(0);
-				b.setLives(0);
+//			if (!( bulletOwnerShip instanceof AlienShip)) {
+			if (bulletOwnerShip instanceof PlayerShip) {
+				colideWithEntity.setHealth(0);
+				b.setHealth(0);
 				b.setDestroyed(true);
 				GamePlayState.score += colideWithEntity.getScore();
 			}
 			// BULLETS FROM ALIEN SHIP (NORMAL && COMMANDER)
 			else if ((bulletOwnerShip instanceof AlienShip)) {
 				// ALIEN BULLETS COLLIDES WITH PLAYER SHIP
-				if(!(colideWithEntity instanceof AlienShip)) {
-					colideWithEntity.setLives(colideWithEntity.getLives()-1);
-					b.setLives(0);
+//				if(!(colideWithEntity instanceof AlienShip)) {
+				if(colideWithEntity instanceof PlayerShip) {
+					((PlayerShip) colideWithEntity).makeDamage(b.getDamage());
+					b.setHealth(0);
 					b.setDestroyed(true);
-					GamePlayState.lostLive = true;
+//					GamePlayState.lostLive = true;
 				}
 			}
 		}

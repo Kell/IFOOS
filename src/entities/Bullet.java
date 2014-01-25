@@ -13,6 +13,7 @@ public class Bullet extends Entity {
 	int direction;
 	private Ship owner;
 	private boolean destroyed = false;
+	protected int damage = 10;
 	
 	public Bullet(float x, float y, int height, int width, int direction, Ship owner) {
 		super(x, y,height, width);
@@ -39,8 +40,11 @@ public class Bullet extends Entity {
 	public void setOwner(Ship owner) {
 		this.owner = owner;
 	}
-
 	
+	
+	public int getDamage() {
+		return damage;
+	}
 	
 
 	public void updateLogic(int delta, GameContainer gc) {
