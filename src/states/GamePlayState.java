@@ -452,13 +452,18 @@ public class GamePlayState extends BasicGameState {
 	
 	
 	public void drawHUD(GameContainer gc, StateBasedGame sbg, final Graphics g) {
+		
 		//START: DRAW CURRENT WEAPON ========================================
-		int w_x = 10;
-		int w_y = gc.getHeight() - 60;
-		g.setLineWidth(3);
-		g.setColor(Color.white);
-		playerEnt.getSelectedWeapon().getImg().draw(w_x, w_y);
-		g.drawRoundRect(w_x, w_y, 45, 45, 4, 4);
+		//not necessary if choosing a weapon
+		if(!drawWeapons)
+		{
+			int w_x = 10;
+			int w_y = gc.getHeight() - 60;
+			g.setLineWidth(3);
+			g.setColor(Color.white);
+			playerEnt.getSelectedWeapon().getImg().draw(w_x, w_y);
+			g.drawRoundRect(w_x, w_y, 45, 45, 4, 4);
+		}
 		//END: DRAW CURRENT WEAPON ========================================
 		
 		
