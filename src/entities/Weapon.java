@@ -26,12 +26,21 @@ public class Weapon {
 	public void shoot(Ship owner) {
 		owner.getBulletLoader().add(new Bullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner));
 //		bullets.add(new Bullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner));
+		
+		increaseHeat();
+	}
+
+	
+	public void increaseHeat() {
+		
+		System.out.println("HeatIncrease:"+heatIncrease);
+		
 		if(heat+heatIncrease <= heatLoad)
 			heat += heatIncrease;
 		else if(heat+heatIncrease >heatLoad)
 			heat = heatLoad;
 	}
-
+	
 
 	public Image getImg() {
 		return img;
