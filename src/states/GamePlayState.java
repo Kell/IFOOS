@@ -445,7 +445,7 @@ public class GamePlayState extends BasicGameState {
 		else
 		{
 			if (gc.getInput().isKeyPressed(gc.getInput().KEY_RETURN)) {
-				System.out.println("PRESSED");
+//				System.out.println("PRESSED");
 				gameStarted =  true;
 			}
 		}
@@ -487,7 +487,7 @@ public class GamePlayState extends BasicGameState {
 		g.setLineWidth(3);
 		g.drawRect(screenWidth - 30, screenHeight - 120, 20, 102);
 		
-		System.out.println("HEALTH:"+playerEnt.getHealth());
+//		System.out.println("HEALTH:"+playerEnt.getHealth());
 		
 		int health = (playerEnt.getHealth() * 100) / playerEnt.getHealthMax();
 		

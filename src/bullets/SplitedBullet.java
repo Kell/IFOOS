@@ -24,8 +24,7 @@ public class SplitedBullet extends Bullet {
 		this.direction = direction;
 		this.owner = owner;
 		this.start_y = y;
-		
-
+		this.type = type;
 	}
 	
 	
@@ -34,9 +33,9 @@ public class SplitedBullet extends Bullet {
 		if(direction == 1) {
 			y -= (delta * dy) / 100;
 			if(type == 1)	
-				x -= (delta * dy) / 100;
+				x -= (delta * dy) / 300;
 			else
-				x += (delta *dy) / 100;
+				x += (delta *dy) / 300;
 		}
 		else {
 			y += (delta * dy) / 100;

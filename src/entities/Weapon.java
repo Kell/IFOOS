@@ -13,6 +13,7 @@ public class Weapon {
 	private int heatIncrease = 20;
 	private float heatDecay = 0.001f;
 	private int heat = 0;
+	protected boolean blocked = false;
 	
 	public Weapon() {
 		try {
@@ -24,21 +25,26 @@ public class Weapon {
 	
 	
 	public void shoot(Ship owner) {
-		owner.getBulletLoader().add(new Bullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner));
-//		bullets.add(new Bullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner));
 		
-		increaseHeat();
+		if(!blocked)
+		{
+			owner.getBulletLoader().add(new Bullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner));
+//		bullets.add(new Bullet((int ) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner));
+			increaseHeat();
+		}
 	}
 
 	
 	public void increaseHeat() {
 		
-		System.out.println("HeatIncrease:"+heatIncrease);
-		
 		if(heat+heatIncrease <= heatLoad)
 			heat += heatIncrease;
-		else if(heat+heatIncrease >heatLoad)
+		else if(heat+heatIncrease > heatLoad)
 			heat = heatLoad;
+		
+		//TODO: block weapon if overheated
+		if(((heatLoad/100)*heat) > 50)
+			blocked = true;
 	}
 	
 
@@ -86,6 +92,10 @@ public class Weapon {
 	
 	public void decreaseHeat() {
 		heat -= heatDecay;
+		
+		if(((heatLoad/100)*heat) < 50)
+			blocked = false;
+		
 		if(heat < 0)
 			heat = 0;
 	}

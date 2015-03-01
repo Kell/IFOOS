@@ -1,5 +1,6 @@
 package bullets;
 
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -28,13 +29,12 @@ public class SplitBullet extends Bullet {
 	}
 	
 	@Override
-	public void updateLogic(int delta) {
+	public void updateLogic(int delta, GameContainer gc) {
 		
 		//SPLIT UP
-		System.out.println("SPLIT BULLET Y:"+y+" start_y:"+start_y);
-		if(y - start_y >= 100)
+//		System.out.println("SPLIT BULLET Y:"+y+" start_y:"+start_y);
+		if(y - start_y <= -100)
 		{
-			System.out.println("SPLIT BULLET!!!!!");
 			owner.getBulletLoader().add(new SplitedBullet(1, x, y, direction, owner));
 			owner.getBulletLoader().add(new SplitedBullet(2, x, y, direction, owner));
 			this.setDestroyed(true);

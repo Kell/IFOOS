@@ -46,6 +46,7 @@ public class CollisionDetection {
 					((PlayerShip) colideWithEntity).makeDamage(b.getDamage());
 					b.setHealth(0);
 					b.setDestroyed(true);
+					
 //					GamePlayState.lostLive = true;
 				}
 			}

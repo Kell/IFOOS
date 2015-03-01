@@ -11,10 +11,14 @@ public class LevelLoader {
 		if(level > 0)
 		{
 			currentLevel = level;
-			System.out.println("LEVEL:"+level);
-			int[][] loadLevel = LevelHolder.levels[level-1];
-			if(loadLevel != null)
-				shipContainer = new ShipContainer(loadLevel);
+			System.out.println("LEVEL:"+level+"|LevelHolder.levels.length:"+LevelHolder.levels.length);
+			
+			if(level <= LevelHolder.levels.length)
+			{
+				int[][] loadLevel = LevelHolder.levels[level-1];
+				if(loadLevel != null)
+					shipContainer = new ShipContainer(loadLevel);
+			}
 		}
 	}
 	

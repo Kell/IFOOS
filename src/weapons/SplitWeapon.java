@@ -15,6 +15,10 @@ import bullets.SplitBullet;
 
 public class SplitWeapon extends Weapon {
 
+	private int heatLoad = 200;
+	private int heatIncrease = 60;
+	private float heatDecay = 0.011f;
+	private int heat = 0;
 	
 	public SplitWeapon() {
 		super.setImg("res/splitweapon.png");
@@ -23,10 +27,13 @@ public class SplitWeapon extends Weapon {
 	
 	
 	public void shoot(Ship owner) {
-		System.out.println("SplitWeapon shoot");
-		SplitBullet b = new SplitBullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner);
 		
-		owner.getBulletLoader().add(b);
+		if(!blocked)
+		{
+			SplitBullet b = new SplitBullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner);
+			owner.getBulletLoader().add(b);
+			increaseHeat();
+		}
 		
 	}
 	

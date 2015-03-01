@@ -8,4 +8,9 @@ public class PlayerShip extends Ship {
 	}
 	
 	
+	public void makeDamage(int damage) {
+		if(health > 0)
+			health -= damage;
+	}
+	
 }

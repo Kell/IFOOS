@@ -29,11 +29,12 @@ public class DualWeapon extends Weapon {
 	
 	public void shoot(Ship owner) {
 		
-		DualBullet db = new DualBullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner);
-		
-		owner.getBulletLoader().addAll(db.getBullets());
-		
-		increaseHeat();
+		if(!blocked)
+		{
+			DualBullet db = new DualBullet((int) owner.getX()+((owner.getWidth()/ 2)), owner.getY() - 10, 2, 10, 1, owner);
+			owner.getBulletLoader().addAll(db.getBullets());
+			increaseHeat();
+		}
 	}
 	
 }
